@@ -17,10 +17,7 @@ import {
   Sparkles,
   ArrowUp,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+/* No shadcn component imports - using plain elements to avoid CSS variable color conflicts */
 
 /* ===== DATA ===== */
 
@@ -86,41 +83,14 @@ const navLinks = [
 
 /* ===== ANIMATION VARIANTS ===== */
 
-const easeInOut = [0.42, 0, 0.58, 1];
-const springConfig = { type: "spring", stiffness: 100, damping: 20 };
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay: i * 0.12, ease: "easeInOut" },
-  }),
-};
-
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: (i: number = 0) => ({
-    opacity: 1,
-    transition: { duration: 0.8, delay: i * 0.1, ease: "easeInOut" },
-  }),
-};
-
-const scaleIn = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.6, ease: easeInOut },
-  },
-};
+const easeOut = [0.25, 0.46, 0.45, 0.94];
 
 const slideLeft = {
   hidden: { opacity: 0, x: -60 },
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.7, ease: "easeInOut" },
+    transition: { duration: 0.7, ease: easeOut },
   },
 };
 
@@ -129,7 +99,7 @@ const slideRight = {
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: 0.7, ease: "easeInOut" },
+    transition: { duration: 0.7, ease: easeOut },
   },
 };
 
@@ -172,6 +142,44 @@ function useCounter(end: number, duration: number = 2000, startOnView: boolean =
   }, [end, duration, inView, startOnView]);
 
   return { count, ref };
+}
+
+/* ===== OPEN STATUS HOOK ===== */
+
+function useOpenStatus() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentTime, setCurrentTime] = useState("");
+
+  useEffect(() => {
+    const check = () => {
+      const now = new Date();
+      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+      // Convert to WIB (UTC+7)
+      const wibTime = new Date(utc + 7 * 3600000);
+      const hours = wibTime.getHours();
+      const day = wibTime.getDay();
+      const isWeekend = day === 0 || day === 6;
+
+      if (isWeekend) {
+        setIsOpen(hours >= 9 && hours < 23);
+      } else {
+        setIsOpen(hours >= 10 && hours < 22);
+      }
+
+      setCurrentTime(
+        wibTime.toLocaleTimeString("id-ID", {
+          hour: "2-digit",
+          minute: "2-digit",
+          timeZone: "Asia/Jakarta",
+        })
+      );
+    };
+    check();
+    const interval = setInterval(check, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return { isOpen, currentTime };
 }
 
 /* ===== MARQUEE BANNER ===== */
@@ -277,15 +285,14 @@ function Navbar() {
                   {link.label}
                 </motion.a>
               ))}
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="ml-3">
-                <Button
-                  size="sm"
-                  className="bg-[#AD4B34] hover:bg-[#8B3A28] text-white font-bold rounded-full px-6 shadow-md shadow-[#AD4B34]/25 hover:shadow-lg hover:shadow-[#AD4B34]/35 transition-all duration-300"
-                  asChild
-                >
-                  <a href="#kontak">Pesan Sekarang</a>
-                </Button>
-              </motion.div>
+              <motion.a
+                href="#kontak"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="ml-3 inline-flex items-center justify-center bg-[#AD4B34] hover:bg-[#8B3A28] text-white font-bold text-sm rounded-full px-5 py-2 shadow-md shadow-[#AD4B34]/25 hover:shadow-lg hover:shadow-[#AD4B34]/35 transition-all duration-300"
+              >
+                Pesan Sekarang
+              </motion.a>
             </div>
 
             {/* Mobile Toggle */}
@@ -342,11 +349,13 @@ function Navbar() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
-                <Button className="w-full bg-[#AD4B34] hover:bg-[#8B3A28] text-white font-bold rounded-xl mt-4 py-6 shadow-lg shadow-[#AD4B34]/20">
-                  <a href="#kontak" onClick={() => setMobileOpen(false)}>
-                    Pesan Sekarang
-                  </a>
-                </Button>
+                <a
+                  href="#kontak"
+                  onClick={() => setMobileOpen(false)}
+                  className="block w-full text-center bg-[#AD4B34] hover:bg-[#8B3A28] text-white font-bold rounded-xl mt-4 py-6 shadow-lg shadow-[#AD4B34]/20 transition-all duration-300"
+                >
+                  Pesan Sekarang
+                </a>
               </motion.div>
             </div>
           </motion.div>
@@ -456,35 +465,29 @@ function HeroSection() {
           transition={{ duration: 0.7, delay: 1, ease: "easeInOut" }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
-            <Button
-              size="lg"
-              className="bg-[#AD4B34] hover:bg-[#8B3A28] text-white font-bold text-lg rounded-full px-8 sm:px-10 py-6 sm:py-7 shadow-xl shadow-[#AD4B34]/40 hover:shadow-2xl hover:shadow-[#AD4B34]/50 transition-all duration-300 animate-pulse-glow"
-              asChild
+          <motion.a
+            href="#menu"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center justify-center bg-[#AD4B34] hover:bg-[#8B3A28] text-white font-bold text-lg rounded-full px-8 sm:px-10 py-6 sm:py-7 shadow-xl shadow-[#AD4B34]/40 hover:shadow-2xl hover:shadow-[#AD4B34]/50 transition-all duration-300 animate-pulse-glow"
+          >
+            Lihat Menu{" "}
+            <motion.span
+              animate={{ x: [0, 4, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              className="inline-block"
             >
-              <a href="#menu">
-                <span className="flex items-center gap-2">
-                  Lihat Menu
-                  <motion.span
-                    animate={{ x: [0, 4, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    →
-                  </motion.span>
-                </span>
-              </a>
-            </Button>
-          </motion.div>
-          <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-2 border-[#F9C779]/60 text-white hover:bg-[#F9C779]/20 hover:border-[#F9C779] font-bold text-lg rounded-full px-8 sm:px-10 py-6 sm:py-7 backdrop-blur-sm transition-all duration-300"
-              asChild
-            >
-              <a href="#kontak">Hubungi Kami</a>
-            </Button>
-          </motion.div>
+              →
+            </motion.span>
+          </motion.a>
+          <motion.a
+            href="#kontak"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-block border-2 border-[#F9C779]/60 bg-transparent text-white hover:bg-[#F9C779]/20 hover:border-[#F9C779] font-bold text-lg rounded-full px-8 sm:px-10 py-6 sm:py-7 backdrop-blur-sm transition-all duration-300"
+          >
+            Hubungi Kami
+          </motion.a>
         </motion.div>
       </motion.div>
 
@@ -722,22 +725,25 @@ function MenuSection() {
                 </div>
 
                 {/* Content */}
-                <CardContent className="p-5 sm:p-6">
+                <div className="p-5 sm:p-6">
                   <h3 className="font-bold text-lg sm:text-xl text-[#2D1810] mb-2 group-hover:text-[#AD4B34] transition-colors duration-300">
                     {item.name}
                   </h3>
                   <p className="text-[#8B6F5E] text-sm leading-relaxed mb-4 line-clamp-2">
                     {item.desc}
                   </p>
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                    <Button className="w-full bg-[#AD4B34] hover:bg-[#8B3A28] text-white font-bold rounded-xl py-5 shadow-md shadow-[#AD4B34]/20 hover:shadow-lg hover:shadow-[#AD4B34]/30 transition-all duration-300">
-                      <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
-                        <Phone className="w-4 h-4" />
-                        Pesan Sekarang
-                      </a>
-                    </Button>
-                  </motion.div>
-                </CardContent>
+                  <motion.a
+                    href="https://wa.me/6281234567890"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="flex items-center justify-center gap-2 w-full bg-[#AD4B34] hover:bg-[#8B3A28] text-white font-bold rounded-xl py-5 shadow-md shadow-[#AD4B34]/20 hover:shadow-lg hover:shadow-[#AD4B34]/30 transition-all duration-300"
+                  >
+                    <Phone className="w-4 h-4" />
+                    Pesan Sekarang
+                  </motion.a>
+                </div>
               </div>
             </motion.div>
           ))}
@@ -983,46 +989,70 @@ function ContactSection() {
               pemesanan khusus.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  size="lg"
-                  className="bg-white text-[#AD4B34] hover:bg-[#FEEFE0] font-bold rounded-full px-8 sm:px-10 py-6 shadow-xl hover:shadow-2xl transition-all duration-300"
-                  asChild
-                >
-                  <a
-                    href="https://wa.me/6281234567890?text=Halo%20MY%20KREP'Z!%20Saya%20ingin%20pesan%20crepes."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2"
-                  >
-                    <Phone className="w-5 h-5" />
-                    Pesan via WhatsApp
-                  </a>
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-2 border-white/40 text-white hover:bg-white/15 font-bold rounded-full px-8 sm:px-10 py-6 backdrop-blur-sm transition-all duration-300"
-                  asChild
-                >
-                  <a
-                    href="https://instagram.com/mykrepz.official"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2"
-                  >
-                    <Instagram className="w-5 h-5" />
-                    Follow Instagram
-                  </a>
-                </Button>
-              </motion.div>
+              <motion.a
+                href="https://wa.me/6281234567890?text=Halo%20MY%20KREP'Z!%20Saya%20ingin%20pesan%20crepes."
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-2 bg-white text-[#AD4B34] hover:bg-[#FEEFE0] font-bold rounded-full px-8 sm:px-10 py-6 shadow-xl hover:shadow-2xl transition-all duration-300"
+              >
+                <Phone className="w-5 h-5" />
+                Pesan via WhatsApp
+              </motion.a>
+              <motion.a
+                href="https://instagram.com/mykrepz.official"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center gap-2 border-2 border-white/40 bg-transparent text-white hover:bg-white/15 font-bold rounded-full px-8 sm:px-10 py-6 backdrop-blur-sm transition-all duration-300"
+              >
+                <Instagram className="w-5 h-5" />
+                Follow Instagram
+              </motion.a>
             </div>
           </div>
         </motion.div>
       </div>
     </section>
+  );
+}
+
+/* ===== OPEN STATUS WIDGET ===== */
+
+function OpenStatusWidget() {
+  const { isOpen, currentTime } = useOpenStatus();
+
+  return (
+    <div>
+      <h4 className="font-bold text-sm mb-5 text-[#F9C779] uppercase tracking-wider">Jam Buka</h4>
+      <ul className="space-y-3 text-sm text-white/50">
+        <li className="flex justify-between">
+          <span>Senin - Jumat</span>
+          <span className="text-white/70 font-medium">10:00 - 22:00 WIB</span>
+        </li>
+        <li className="flex justify-between">
+          <span>Sabtu - Minggu</span>
+          <span className="text-white/70 font-medium">09:00 - 23:00 WIB</span>
+        </li>
+      </ul>
+      <div className="mt-5 space-y-2">
+        <div className={`inline-flex items-center gap-2 border rounded-xl px-3 py-2 transition-all duration-500 ${
+          isOpen
+            ? "bg-green-500/15 border-green-500/30"
+            : "bg-red-500/15 border-red-500/30"
+        }`}>
+          <div className={`w-2.5 h-2.5 rounded-full ${isOpen ? "bg-green-400 animate-pulse" : "bg-red-400"}`} />
+          <span className={`text-xs font-bold ${isOpen ? "text-green-400" : "text-red-400"}`}>
+            {isOpen ? "OPEN NOW" : "CLOSED"}
+          </span>
+        </div>
+        <p className="text-white/30 text-[10px]">
+          WIB {currentTime}
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -1097,7 +1127,7 @@ function Footer() {
                     href={link.href}
                     className="text-white/50 text-sm hover:text-white hover:translate-x-1 inline-flex items-center gap-1 transition-all duration-300"
                   >
-                    <span className="text-[#AD4B34]">›</span>
+                    <span className="text-[#AD4B34]">&gt;</span>
                     {link.label}
                   </a>
                 </li>
@@ -1105,24 +1135,8 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Hours */}
-          <div>
-            <h4 className="font-bold text-sm mb-5 text-[#F9C779] uppercase tracking-wider">Jam Buka</h4>
-            <ul className="space-y-3 text-sm text-white/50">
-              <li className="flex justify-between">
-                <span>Senin - Jumat</span>
-                <span className="text-white/70 font-medium">10:00 - 22:00</span>
-              </li>
-              <li className="flex justify-between">
-                <span>Sabtu - Minggu</span>
-                <span className="text-white/70 font-medium">09:00 - 23:00</span>
-              </li>
-            </ul>
-            <div className="mt-5 inline-flex items-center gap-2 bg-[#AD4B34]/20 border border-[#AD4B34]/30 rounded-xl px-3 py-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span className="text-green-400 text-xs font-semibold">OPEN NOW</span>
-            </div>
-          </div>
+          {/* Hours */
+          <OpenStatusWidget />
 
           {/* Contact */}
           <div>
@@ -1144,7 +1158,7 @@ function Footer() {
           </div>
         </div>
 
-        <Separator className="bg-white/10 mb-8" />
+        <div className="h-px bg-white/10 mb-8" />
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-white/30 text-sm">
           <p>&copy; 2024 MY KREP&apos;Z. All rights reserved.</p>
