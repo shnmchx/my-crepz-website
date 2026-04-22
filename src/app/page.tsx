@@ -52,7 +52,7 @@ const menuItems = [
     price: "Rp 30.000",
     image: "/mykrepz-menu4.png",
     badge: "New Menu",
-    badgeColor: "bg-emerald-600",
+    badgeColor: "bg-[#8B6F5E]",
   },
 ];
 
@@ -146,40 +146,61 @@ function useCounter(end: number, duration: number = 2000, startOnView: boolean =
 
 /* ===== OPEN STATUS HOOK ===== */
 
+interface TimeZoneInfo {
+  label: string;
+  tz: string;
+  hours: number;
+  minutes: number;
+  timeStr: string;
+  isOpen: boolean;
+}
+
 function useOpenStatus() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [currentTime, setCurrentTime] = useState("");
+  const [zones, setZones] = useState<TimeZoneInfo[]>([]);
 
   useEffect(() => {
     const check = () => {
       const now = new Date();
-      const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-      // Convert to WIB (UTC+7)
-      const wibTime = new Date(utc + 7 * 3600000);
-      const hours = wibTime.getHours();
-      const day = wibTime.getDay();
-      const isWeekend = day === 0 || day === 6;
+      const timeZones: { label: string; tz: string; utcOffset: number }[] = [
+        { label: "WIB", tz: "Asia/Jakarta", utcOffset: 7 },
+        { label: "WITA", tz: "Asia/Makassar", utcOffset: 8 },
+        { label: "WIT", tz: "Asia/Jayapura", utcOffset: 9 },
+      ];
 
-      if (isWeekend) {
-        setIsOpen(hours >= 9 && hours < 23);
-      } else {
-        setIsOpen(hours >= 10 && hours < 22);
-      }
+      const results: TimeZoneInfo[] = timeZones.map(({ label, tz, utcOffset }) => {
+        const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+        const localTime = new Date(utc + utcOffset * 3600000);
+        const hours = localTime.getHours();
+        const minutes = localTime.getMinutes();
+        const day = localTime.getDay();
+        const isWeekend = day === 0 || day === 6;
 
-      setCurrentTime(
-        wibTime.toLocaleTimeString("id-ID", {
+        const isOpen = isWeekend
+          ? hours >= 9 && hours < 23
+          : hours >= 10 && hours < 22;
+
+        const timeStr = localTime.toLocaleTimeString("id-ID", {
           hour: "2-digit",
           minute: "2-digit",
-          timeZone: "Asia/Jakarta",
-        })
-      );
+          timeZone: tz,
+        });
+
+        return { label, tz, hours, minutes, timeStr, isOpen };
+      });
+
+      setZones(results);
     };
     check();
     const interval = setInterval(check, 30000);
     return () => clearInterval(interval);
   }, []);
 
-  return { isOpen, currentTime };
+  // Primary status based on WIB (Jakarta)
+  const wibZone = zones.find((z) => z.label === "WIB");
+  const isOpen = wibZone?.isOpen ?? false;
+  const currentTime = wibZone?.timeStr ?? "";
+
+  return { isOpen, currentTime, zones };
 }
 
 /* ===== MARQUEE BANNER ===== */
@@ -855,31 +876,31 @@ function ContactSection() {
       title: "WhatsApp / Telepon",
       detail: "+62 812-3456-7890",
       link: "https://wa.me/6281234567890",
-      color: "from-green-50 to-green-100/50",
+      color: "from-[#FEEFE0] to-[#FFF8EC]",
       iconColor: "text-green-600",
     },
     {
       icon: <Clock className="w-5 h-5 sm:w-6 sm:h-6" />,
       title: "Jam Operasional",
       detail: "Setiap Hari: 10.00 - 22.00 WIB",
-      color: "from-blue-50 to-blue-100/50",
-      iconColor: "text-blue-600",
+      color: "from-[#FEEFE0] to-[#FFF8EC]",
+      iconColor: "text-[#AD4B34]",
     },
     {
       icon: <Instagram className="w-5 h-5 sm:w-6 sm:h-6" />,
       title: "Instagram",
       detail: "@mykrepz.official",
       link: "https://instagram.com/mykrepz.official",
-      color: "from-pink-50 to-purple-100/50",
-      iconColor: "text-pink-600",
+      color: "from-[#FEEFE0] to-[#F9C779]/20",
+      iconColor: "text-[#AD4B34]",
     },
     {
       icon: <Send className="w-5 h-5 sm:w-6 sm:h-6" />,
       title: "TikTok",
       detail: "@mykrepz",
       link: "https://tiktok.com/@mykrepz",
-      color: "from-gray-50 to-gray-100/50",
-      iconColor: "text-gray-800",
+      color: "from-[#FFF8EC] to-[#FEEFE0]",
+      iconColor: "text-[#2D1810]",
     },
   ];
 
@@ -1022,7 +1043,7 @@ function ContactSection() {
 /* ===== OPEN STATUS WIDGET ===== */
 
 function OpenStatusWidget() {
-  const { isOpen, currentTime } = useOpenStatus();
+  const { isOpen, currentTime, zones } = useOpenStatus();
 
   return (
     <div>
@@ -1037,7 +1058,20 @@ function OpenStatusWidget() {
           <span className="text-white/70 font-medium">09:00 - 23:00 WIB</span>
         </li>
       </ul>
-      <div className="mt-5 space-y-2">
+
+      {/* Live timezone times */}
+      {zones.length > 0 && (
+        <div className="mt-4 space-y-1.5">
+          {zones.map((z) => (
+            <div key={z.label} className="flex items-center justify-between text-[11px]">
+              <span className="text-white/40 font-medium">{z.label}</span>
+              <span className="text-white/60 font-mono">{z.timeStr}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-4 space-y-2">
         <div className={`inline-flex items-center gap-2 border rounded-xl px-3 py-2 transition-all duration-500 ${
           isOpen
             ? "bg-green-500/15 border-green-500/30"
@@ -1049,7 +1083,7 @@ function OpenStatusWidget() {
           </span>
         </div>
         <p className="text-white/30 text-[10px]">
-          WIB {currentTime}
+          Berdasarkan waktu WIB {currentTime}
         </p>
       </div>
     </div>
@@ -1135,7 +1169,7 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Hours */
+          {/* Hours */}
           <OpenStatusWidget />
 
           {/* Contact */}
