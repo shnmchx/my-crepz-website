@@ -23,7 +23,7 @@ import {
 
 const menuItems = [
   {
-    name: "Nutella Strawberry",
+    name: "Sweet Signature Box",
     desc: "Crepes lembut dengan olesan Nutella premium dan potongan stroberi segar, ditaburi gula halus.",
     price: "Rp 25.000",
     image: "/mykrepz-menu1.png",
@@ -31,7 +31,7 @@ const menuItems = [
     badgeColor: "bg-[#AD4B34]",
   },
   {
-    name: "Banana Chocolate",
+    name: "Classic Delight Box",
     desc: "Perpaduan sempurna crepes dengan irisan pisang raja, saus cokelat Belgian, dan whipped cream.",
     price: "Rp 22.000",
     image: "/mykrepz-menu2.png",
@@ -39,7 +39,7 @@ const menuItems = [
     badgeColor: "bg-[#F9C779] text-[#2D1810]",
   },
   {
-    name: "Savory Cheese Ham",
+    name: "Savory Selection Box",
     desc: "Crepes gurih dengan keju mozzarella leleh, ham premium, dan sayuran segar pilihan.",
     price: "Rp 28.000",
     image: "/mykrepz-menu3.png",
@@ -47,7 +47,7 @@ const menuItems = [
     badgeColor: "bg-[#8B6F5E]",
   },
   {
-    name: "Matcha Red Bean",
+    name: "Premium Fusion Box",
     desc: "Crepes dengan es krim matcha Jepang, kacang merah, dan saus matcha autentik.",
     price: "Rp 30.000",
     image: "/mykrepz-menu4.png",
@@ -214,7 +214,7 @@ function MarqueeBanner() {
   const doubled = [...items, ...items];
 
   return (
-    <div className="overflow-hidden py-3 bg-[#AD4B34] relative">
+    <div className="overflow-hidden py-2.5 bg-[#AD4B34] relative mt-[60px]">
       <div className="absolute inset-0 bg-gradient-to-r from-[#AD4B34] via-transparent to-[#AD4B34] z-10 pointer-events-none" />
       <motion.div
         className="flex whitespace-nowrap gap-8"
@@ -248,14 +248,15 @@ function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out bg-white ${
           scrolled
-            ? "bg-[#FFF8EC]/90 backdrop-blur-xl shadow-lg shadow-[#AD4B34]/5 py-2"
-            : "bg-transparent py-3"
+            ? "shadow-lg shadow-[#AD4B34]/8"
+            : "shadow-md shadow-black/5"
         }`}
+        style={{ height: "60px" }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+          <div className="flex items-center justify-between h-full">
             <motion.a
               href="#beranda"
               className="flex items-center gap-2 sm:gap-3"
@@ -264,26 +265,17 @@ function Navbar() {
             >
               <div className="relative">
                 <img
-                  src="/mykrepz-logo.png"
+                  src="/Logo.jpeg"
                   alt="MY KREP'Z Logo"
                   className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl object-cover shadow-md"
                 />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#F9C779] rounded-full animate-pulse" />
               </div>
               <div className="flex flex-col">
-                <span
-                  className={`font-extrabold text-lg sm:text-xl tracking-wide transition-colors duration-500 ${
-                    scrolled ? "text-[#AD4B34]" : "text-white"
-                  }`}
-                  style={{ textShadow: scrolled ? "none" : "0 2px 10px rgba(0,0,0,0.3)" }}
-                >
+                <span className="font-extrabold text-lg sm:text-xl tracking-wide text-[#AD4B34]">
                   MY KREP&apos;Z
                 </span>
-                <span
-                  className={`text-[10px] font-medium tracking-[0.2em] uppercase transition-colors duration-500 ${
-                    scrolled ? "text-[#8B6F5E]" : "text-white/70"
-                  }`}
-                >
+                <span className="text-[10px] font-medium tracking-[0.2em] uppercase text-[#8B6F5E]">
                   Premium Crepes
                 </span>
               </div>
@@ -295,11 +287,7 @@ function Navbar() {
                 <motion.a
                   key={link.href}
                   href={link.href}
-                  className={`relative px-4 py-2 text-sm font-semibold rounded-full transition-colors duration-300 ${
-                    scrolled
-                      ? "text-[#8B6F5E] hover:text-[#AD4B34] hover:bg-[#FEEFE0]"
-                      : "text-white/80 hover:text-white hover:bg-white/10"
-                  }`}
+                  className="relative px-4 py-2 text-sm font-semibold rounded-full text-[#8B6F5E] hover:text-[#AD4B34] hover:bg-[#FEEFE0] transition-colors duration-300"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -310,7 +298,7 @@ function Navbar() {
                 href="#kontak"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="ml-3 inline-flex items-center justify-center bg-[#AD4B34] hover:bg-[#8B3A28] text-white font-bold text-sm rounded-full px-5 py-2 shadow-md shadow-[#AD4B34]/25 hover:shadow-lg hover:shadow-[#AD4B34]/35 transition-all duration-300"
+                className="ml-3 inline-flex items-center justify-center bg-[#AD4B34] hover:bg-[#8B3A28] text-white font-bold text-sm rounded-full px-5 py-2.5 shadow-md shadow-[#AD4B34]/25 hover:shadow-lg hover:shadow-[#AD4B34]/35 transition-all duration-300"
               >
                 Pesan Sekarang
               </motion.a>
@@ -318,9 +306,7 @@ function Navbar() {
 
             {/* Mobile Toggle */}
             <motion.button
-              className={`md:hidden p-2 rounded-xl transition-colors duration-300 ${
-                scrolled ? "text-[#AD4B34] hover:bg-[#FEEFE0]" : "text-white hover:bg-white/10"
-              }`}
+              className="md:hidden p-2 rounded-xl text-[#AD4B34] hover:bg-[#FEEFE0] transition-colors duration-300"
               onClick={() => setMobileOpen(!mobileOpen)}
               whileTap={{ scale: 0.9 }}
               aria-label="Toggle menu"
@@ -349,7 +335,7 @@ function Navbar() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.95 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed inset-x-4 top-20 z-40 md:hidden bg-white rounded-2xl shadow-2xl shadow-black/10 border border-[#F0DCC8] overflow-hidden"
+            className="fixed inset-x-4 top-[68px] z-40 md:hidden bg-white rounded-2xl shadow-2xl shadow-black/10 border border-[#F0DCC8] overflow-hidden"
           >
             <div className="p-6 space-y-2">
               {navLinks.map((link, i) => (
@@ -405,20 +391,18 @@ function HeroSection() {
         />
       </motion.div>
 
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#2D1810]/70 via-[#AD4B34]/30 to-[#2D1810]/80" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#AD4B34]/20 via-transparent to-[#AD4B34]/20" />
+      {/* Gradient overlays - extra dark for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/50 to-black/80" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />
 
       {/* Floating decorative elements */}
-      <div className="absolute top-20 left-10 w-20 h-20 bg-[#F9C779]/20 rounded-full animate-float-slow" />
-      <div className="absolute top-40 right-16 w-14 h-14 bg-[#AD4B34]/15 rounded-full animate-float-medium" />
-      <div className="absolute bottom-40 left-20 w-24 h-24 bg-[#FEEFE0]/10 rounded-full animate-float-fast" />
-      <div className="absolute top-60 left-1/3 w-10 h-10 bg-[#F9C779]/15 rounded-full animate-float-medium" style={{ animationDelay: "1s" }} />
-      <div className="absolute bottom-60 right-1/4 w-16 h-16 bg-white/10 rounded-full animate-float-slow" style={{ animationDelay: "2s" }} />
+      <div className="absolute top-20 left-10 w-20 h-20 bg-[#F9C779]/15 rounded-full animate-float-slow" />
+      <div className="absolute top-40 right-16 w-14 h-14 bg-[#AD4B34]/10 rounded-full animate-float-medium" />
+      <div className="absolute bottom-40 left-20 w-24 h-24 bg-[#FEEFE0]/5 rounded-full animate-float-fast" />
 
       {/* Decorative corner shapes */}
-      <div className="absolute top-0 left-0 w-40 h-40 border-t-2 border-l-2 border-[#F9C779]/30 rounded-tl-3xl" />
-      <div className="absolute bottom-0 right-0 w-40 h-40 border-b-2 border-r-2 border-[#F9C779]/30 rounded-br-3xl" />
+      <div className="absolute top-0 left-0 w-32 h-32 border-t-2 border-l-2 border-[#F9C779]/20 rounded-tl-3xl" />
+      <div className="absolute bottom-0 right-0 w-32 h-32 border-b-2 border-r-2 border-[#F9C779]/20 rounded-br-3xl" />
 
       {/* Content */}
       <motion.div
@@ -432,9 +416,9 @@ function HeroSection() {
           transition={{ duration: 0.8, ease: "easeInOut" }}
           className="mb-6 sm:mb-8"
         >
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-5 py-2">
+          <div className="inline-flex items-center gap-2 bg-black/30 backdrop-blur-md border border-white/20 rounded-full px-5 py-2">
             <Sparkles className="w-4 h-4 text-[#F9C779]" />
-            <span className="text-white/90 text-sm font-medium">Premium Crepes Since 2024</span>
+            <span className="text-white text-sm font-medium">Premium Crepes Since 2026</span>
             <Flame className="w-4 h-4 text-[#AD4B34]" />
           </div>
         </motion.div>
@@ -446,7 +430,7 @@ function HeroSection() {
             animate={{ y: 0 }}
             transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.2 }}
             className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tight leading-none"
-            style={{ textShadow: "0 4px 30px rgba(0,0,0,0.3)" }}
+            style={{ textShadow: "0 4px 40px rgba(0,0,0,0.6), 0 1px 8px rgba(0,0,0,0.4)" }}
           >
             MY KREP&apos;Z
           </motion.h1>
@@ -461,7 +445,7 @@ function HeroSection() {
         >
           <div className="flex items-center justify-center gap-3 mb-6 sm:mb-8">
             <div className="h-px w-12 sm:w-16 bg-gradient-to-r from-transparent to-[#F9C779]" />
-            <p className="text-[#F9C779] font-semibold text-sm sm:text-base tracking-[0.3em] uppercase">
+            <p className="text-[#F9C779] font-semibold text-sm sm:text-base tracking-[0.3em] uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
               Handcrafted with Love
             </p>
             <div className="h-px w-12 sm:w-16 bg-gradient-to-l from-transparent to-[#F9C779]" />
@@ -473,7 +457,8 @@ function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.8, ease: "easeInOut" }}
-          className="text-base sm:text-lg md:text-xl text-white/85 font-light mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed"
+          className="text-base sm:text-lg md:text-xl text-white font-light mb-8 sm:mb-12 max-w-2xl mx-auto leading-relaxed"
+          style={{ textShadow: "0 2px 20px rgba(0,0,0,0.5), 0 1px 4px rgba(0,0,0,0.3)" }}
         >
           Nikmati crepes lezat dengan topping premium pilihan.
           Dibuat segar langsung di depan mata Anda!
@@ -505,7 +490,8 @@ function HeroSection() {
             href="#kontak"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
-            className="inline-block border-2 border-[#F9C779]/60 bg-transparent text-white hover:bg-[#F9C779]/20 hover:border-[#F9C779] font-bold text-lg rounded-full px-8 sm:px-10 py-6 sm:py-7 backdrop-blur-sm transition-all duration-300"
+            className="inline-block border-2 border-[#F9C779]/60 bg-black/20 text-white hover:bg-[#F9C779]/20 hover:border-[#F9C779] font-bold text-lg rounded-full px-8 sm:px-10 py-6 sm:py-7 backdrop-blur-sm transition-all duration-300"
+            style={{ textShadow: "0 2px 10px rgba(0,0,0,0.3)" }}
           >
             Hubungi Kami
           </motion.a>
@@ -562,8 +548,8 @@ function AboutSection() {
 
               <div className="relative bg-white p-3 rounded-3xl shadow-2xl shadow-[#AD4B34]/10">
                 <img
-                  src="/mykrepz-logo.png"
-                  alt="MY KREP'Z Logo"
+                  src="/mykrepz-show.png"
+                  alt="MY KREP'Z Product Show"
                   className="w-full rounded-2xl"
                 />
               </div>
@@ -589,7 +575,7 @@ function AboutSection() {
               >
                 <span className="flex items-center gap-1">
                   <Star className="w-4 h-4" fill="#2D1810" />
-                  Est. 2024
+                  Est. 2026
                 </span>
               </motion.div>
             </div>
@@ -867,15 +853,15 @@ function ContactSection() {
     {
       icon: <MapPin className="w-5 h-5 sm:w-6 sm:h-6" />,
       title: "Alamat Bisnis",
-      detail: "Jl. Kuliner Raya No. 88, Blok C3, Jakarta Selatan 12345",
+      detail: "Kawasan CitraLand City CPI, Jalan Sunset Boulevard, Kota Makassar, Sulawesi Selatan 90224",
       color: "from-[#AD4B34]/10 to-[#F9C779]/10",
       iconColor: "text-[#AD4B34]",
     },
     {
       icon: <Phone className="w-5 h-5 sm:w-6 sm:h-6" />,
       title: "WhatsApp / Telepon",
-      detail: "+62 812-3456-7890",
-      link: "https://wa.me/6281234567890",
+      detail: "+62 811-5178-383",
+      link: "https://wa.me/628115178383",
       color: "from-[#FEEFE0] to-[#FFF8EC]",
       iconColor: "text-green-600",
     },
@@ -889,8 +875,8 @@ function ContactSection() {
     {
       icon: <Instagram className="w-5 h-5 sm:w-6 sm:h-6" />,
       title: "Instagram",
-      detail: "@mykrepz.official",
-      link: "https://instagram.com/mykrepz.official",
+      detail: "@my_krepz",
+      link: "https://www.instagram.com/my_krepz?igsh=MTduZXI0MzAxOW55MA==",
       color: "from-[#FEEFE0] to-[#F9C779]/20",
       iconColor: "text-[#AD4B34]",
     },
@@ -1011,7 +997,7 @@ function ContactSection() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.a
-                href="https://wa.me/6281234567890?text=Halo%20MY%20KREP'Z!%20Saya%20ingin%20pesan%20crepes."
+                href="https://wa.me/628115178383?text=Halo%20MY%20KREP'Z!%20Saya%20ingin%20pesan%20crepes."
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.05, y: -2 }}
@@ -1022,7 +1008,7 @@ function ContactSection() {
                 Pesan via WhatsApp
               </motion.a>
               <motion.a
-                href="https://instagram.com/mykrepz.official"
+                href="https://www.instagram.com/my_krepz?igsh=MTduZXI0MzAxOW55MA=="
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.05, y: -2 }}
@@ -1104,7 +1090,7 @@ function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-5">
               <img
-                src="/mykrepz-logo.png"
+                src="/Logo.jpeg"
                 alt="MY KREP'Z"
                 className="w-11 h-11 rounded-xl shadow-md"
               />
@@ -1119,7 +1105,7 @@ function Footer() {
             </p>
             <div className="flex gap-3">
               <motion.a
-                href="https://instagram.com/mykrepz.official"
+                href="https://www.instagram.com/my_krepz?igsh=MTduZXI0MzAxOW55MA=="
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1, y: -2 }}
@@ -1139,7 +1125,7 @@ function Footer() {
                 <Send className="w-4 h-4" />
               </motion.a>
               <motion.a
-                href="https://wa.me/6281234567890"
+                href="https://wa.me/628115178383"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1, y: -2 }}
@@ -1178,15 +1164,15 @@ function Footer() {
             <div className="space-y-4 text-sm text-white/50">
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-[#AD4B34] shrink-0 mt-0.5" />
-                <span>Jl. Kuliner Raya No. 88, Jakarta Selatan</span>
+                <span>Kawasan CitraLand City CPI, Jalan Sunset Boulevard, Kota Makassar, Sulawesi Selatan 90224</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-[#AD4B34] shrink-0" />
-                <span>+62 812-3456-7890</span>
+                <span>+62 811-5178-383</span>
               </div>
               <div className="flex items-center gap-2">
                 <Instagram className="w-4 h-4 text-[#AD4B34] shrink-0" />
-                <span>@mykrepz.official</span>
+                <span>@my_krepz</span>
               </div>
             </div>
           </div>
@@ -1195,7 +1181,7 @@ function Footer() {
         <div className="h-px bg-white/10 mb-8" />
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-white/30 text-sm">
-          <p>&copy; 2024 MY KREP&apos;Z. All rights reserved.</p>
+          <p>&copy; 2026 MY KREP&apos;Z. All rights reserved.</p>
           <p className="flex items-center gap-1">
             Made with <Heart className="w-3 h-3 text-[#AD4B34]" fill="#AD4B34" /> for crepes lovers
           </p>

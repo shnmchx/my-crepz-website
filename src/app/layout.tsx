@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     "kuliner",
   ],
   icons: {
-    icon: "/mykrepz-logo.png",
+    icon: "/Logo.jpeg",
   },
   openGraph: {
     title: "MY KREP'Z - Premium Crepes & More",
