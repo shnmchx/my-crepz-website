@@ -295,7 +295,7 @@ function Navbar() {
                 </motion.a>
               ))}
               <motion.a
-                href="#kontak"
+                href="https://wa.me/628115178383"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="ml-3 inline-flex items-center justify-center bg-[#AD4B34] hover:bg-[#8B3A28] text-white font-bold text-sm rounded-full px-5 py-2.5 shadow-md shadow-[#AD4B34]/25 hover:shadow-lg hover:shadow-[#AD4B34]/35 transition-all duration-300"
@@ -357,7 +357,7 @@ function Navbar() {
                 transition={{ delay: 0.4 }}
               >
                 <a
-                  href="#kontak"
+                  href="https://wa.me/628115178383"
                   onClick={() => setMobileOpen(false)}
                   className="block w-full text-center bg-[#AD4B34] hover:bg-[#8B3A28] text-white font-bold rounded-xl mt-4 py-6 shadow-lg shadow-[#AD4B34]/20 transition-all duration-300"
                 >
