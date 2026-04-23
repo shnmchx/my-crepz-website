@@ -265,7 +265,7 @@ function Navbar() {
             >
               <div className="relative">
                 <img
-                  src="/Logo.jpeg"
+                  src="/Logo.png"
                   alt="MY KREP'Z Logo"
                   className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl object-cover shadow-md"
                 />
@@ -1090,7 +1090,7 @@ function Footer() {
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-5">
               <img
-                src="/Logo.jpeg"
+                src="/Logo.png"
                 alt="MY KREP'Z"
                 className="w-11 h-11 rounded-xl shadow-md"
               />
